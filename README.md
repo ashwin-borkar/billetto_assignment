@@ -263,3 +263,9 @@ bundle exec bundler-audit
 
 This project is created as part of the Billetto Rails Engineer Test assignment.
 # billetto_assignment
+<img width="1708" height="1008" alt="image" src="https://github.com/user-attachments/assets/4798755f-4e78-4685-879b-548f95b18b4d" /><img width="1708" height="1008" alt="image" src="https://github.com/user-attachments/assets/44573c0b-5eb4-4286-8cc8-176e76b2e04e" /><img width="1708" height="1008" alt="image" src="https://github.com/user-attachments/assets/5e53eca4-d6d5-421f-b353-82fb0f71bfd9" />
+<img width="1708" height="1008" alt="image" src="https://github.com/user-attachments/assets/b4e18723-21a4-41a4-805b-c1b9c198cd64" />
+<img width="1708" height="1008" alt="image" src="https://github.com/user-attachments/assets/00a8c82d-0f5d-45cf-b583-a87c342d6a93" />
+<img width="1708" height="1008" alt="image" src="https://github.com/user-attachments/assets/18c26885-39ff-4f4c-8d91-5432ee73227d" />
+
+
