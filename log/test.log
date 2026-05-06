@@ -1,0 +1,289 @@
+  [1m[36mActiveRecord::InternalMetadata Load (2.0ms)[0m  [1m[34mSELECT * FROM "ar_internal_metadata" WHERE "ar_internal_metadata"."key" = $1 ORDER BY "ar_internal_metadata"."key" ASC LIMIT 1[0m  [[nil, "schema_sha1"]]
+  [1m[36mActiveRecord::SchemaMigration Load (1.6ms)[0m  [1m[34mSELECT "schema_migrations"."version" FROM "schema_migrations" ORDER BY "schema_migrations"."version" ASC[0m
+  [1m[36mActiveRecord::InternalMetadata Load (1.1ms)[0m  [1m[34mSELECT * FROM "ar_internal_metadata" WHERE "ar_internal_metadata"."key" = $1 ORDER BY "ar_internal_metadata"."key" ASC LIMIT 1[0m  [[nil, "environment"]]
+  [1m[36mActiveRecord::SchemaMigration Load (0.2ms)[0m  [1m[34mSELECT "schema_migrations"."version" FROM "schema_migrations" ORDER BY "schema_migrations"."version" ASC[0m
+  [1m[36mActiveRecord::InternalMetadata Load (0.3ms)[0m  [1m[34mSELECT * FROM "ar_internal_metadata" WHERE "ar_internal_metadata"."key" = $1 ORDER BY "ar_internal_metadata"."key" ASC LIMIT 1[0m  [[nil, "environment"]]
+  [1m[36mActiveRecord::SchemaMigration Load (0.2ms)[0m  [1m[34mSELECT "schema_migrations"."version" FROM "schema_migrations" ORDER BY "schema_migrations"."version" ASC[0m
+  [1m[36mActiveRecord::InternalMetadata Load (0.3ms)[0m  [1m[34mSELECT * FROM "ar_internal_metadata" WHERE "ar_internal_metadata"."key" = $1 ORDER BY "ar_internal_metadata"."key" ASC LIMIT 1[0m  [[nil, "environment"]]
+  [1m[35mSQL (0.2ms)[0m  [1m[35mSET search_path TO public[0m
+  [1m[35m (51.4ms)[0m  [1m[35mDROP DATABASE IF EXISTS "billetto_assignment_test"[0m
+  [1m[35m (348.1ms)[0m  [1m[35mCREATE DATABASE "billetto_assignment_test" ENCODING = 'unicode'[0m
+  [1m[35mSQL (32.1ms)[0m  [1m[35mCREATE EXTENSION IF NOT EXISTS "plpgsql" SCHEMA pg_catalog[0m
+  [1m[35m (0.5ms)[0m  [1m[35mDROP TABLE IF EXISTS "event_store_events" CASCADE[0m
+  [1m[35m (8.7ms)[0m  [1m[35mCREATE TABLE "event_store_events" ("id" bigserial primary key, "created_at" timestamp(6) DEFAULT now() NOT NULL, "data" bytea NOT NULL, "event_id" uuid NOT NULL, "event_type" character varying NOT NULL, "metadata" bytea NOT NULL, "valid_at" timestamp(6) DEFAULT now() NOT NULL)[0m
+  [1m[35m (2.6ms)[0m  [1m[35mCREATE UNIQUE INDEX "index_event_store_events_on_event_id" ON "event_store_events" ("event_id")[0m
+  [1m[35m (0.2ms)[0m  [1m[35mDROP TABLE IF EXISTS "event_store_streams" CASCADE[0m
+  [1m[35m (6.0ms)[0m  [1m[35mCREATE TABLE "event_store_streams" ("id" bigserial primary key, "created_at" timestamp(6) DEFAULT now() NOT NULL, "event_id" uuid NOT NULL, "position" bigint NOT NULL, "stream" character varying NOT NULL)[0m
+  [1m[35m (2.7ms)[0m  [1m[35mCREATE UNIQUE INDEX "index_event_store_streams_on_event_id" ON "event_store_streams" ("event_id")[0m
+  [1m[35m (2.7ms)[0m  [1m[35mCREATE UNIQUE INDEX "index_event_store_streams_on_stream_and_position" ON "event_store_streams" ("stream", "position")[0m
+  [1m[35m (0.2ms)[0m  [1m[35mDROP TABLE IF EXISTS "event_vote_counts" CASCADE[0m
+  [1m[35m (5.2ms)[0m  [1m[35mCREATE TABLE "event_vote_counts" ("id" bigserial primary key, "created_at" timestamp(6) NOT NULL, "downvotes_count" integer DEFAULT 0, "event_id" character varying NOT NULL, "total_votes" integer DEFAULT 0, "updated_at" timestamp(6) NOT NULL, "upvotes_count" integer DEFAULT 0)[0m
+  [1m[35m (4.3ms)[0m  [1m[35mCREATE UNIQUE INDEX "index_event_vote_counts_on_event_id" ON "event_vote_counts" ("event_id")[0m
+  [1m[35m (3.0ms)[0m  [1m[35mCREATE INDEX "index_event_vote_counts_on_total_votes" ON "event_vote_counts" ("total_votes")[0m
+  [1m[35m (0.3ms)[0m  [1m[35mDROP TABLE IF EXISTS "events" CASCADE[0m
+  [1m[35m (5.6ms)[0m  [1m[35mCREATE TABLE "events" ("id" bigserial primary key, "created_at" timestamp(6) NOT NULL, "description" text, "downvotes_count" integer DEFAULT 0, "end_date" timestamp(6), "external_id" character varying NOT NULL, "image_url" character varying, "location" character varying, "price" decimal(10,2), "start_date" timestamp(6), "title" character varying NOT NULL, "updated_at" timestamp(6) NOT NULL, "upvotes_count" integer DEFAULT 0)[0m
+  [1m[35m (3.4ms)[0m  [1m[35mCREATE UNIQUE INDEX "index_events_on_external_id" ON "events" ("external_id")[0m
+  [1m[35m (4.0ms)[0m  [1m[35mCREATE INDEX "index_events_on_start_date" ON "events" ("start_date")[0m
+  [1m[35m (2.6ms)[0m  [1m[35mCREATE INDEX "index_events_on_title" ON "events" ("title")[0m
+  [1m[35m (0.2ms)[0m  [1m[35mDROP TABLE IF EXISTS "incoming_webhooks" CASCADE[0m
+  [1m[35m (5.4ms)[0m  [1m[35mCREATE TABLE "incoming_webhooks" ("id" bigserial primary key, "created_at" timestamp(6) NOT NULL, "data" jsonb NOT NULL, "handled_at" timestamp(6), "processing_result" text, "service" character varying NOT NULL, "updated_at" timestamp(6) NOT NULL)[0m
+  [1m[35m (3.2ms)[0m  [1m[35mCREATE INDEX "index_incoming_webhooks_on_handled_at" ON "incoming_webhooks" ("handled_at")[0m
+  [1m[35m (7.2ms)[0m  [1m[35mCREATE INDEX "index_incoming_webhooks_on_service" ON "incoming_webhooks" ("service")[0m
+  [1m[35m (7.2ms)[0m  [1m[35mCREATE TABLE "schema_migrations" ("version" character varying NOT NULL PRIMARY KEY)[0m
+  [1m[36mActiveRecord::SchemaMigration Load (0.9ms)[0m  [1m[34mSELECT "schema_migrations"."version" FROM "schema_migrations" ORDER BY "schema_migrations"."version" ASC[0m
+  [1m[35m (1.1ms)[0m  [1m[32mINSERT INTO "schema_migrations" (version) VALUES (20260505121000)[0m
+  [1m[35m (6.7ms)[0m  [1m[35mCREATE TABLE "ar_internal_metadata" ("key" character varying NOT NULL PRIMARY KEY, "value" character varying, "created_at" timestamp(6) NOT NULL, "updated_at" timestamp(6) NOT NULL)[0m
+  [1m[36mActiveRecord::InternalMetadata Load (0.8ms)[0m  [1m[34mSELECT * FROM "ar_internal_metadata" WHERE "ar_internal_metadata"."key" = $1 ORDER BY "ar_internal_metadata"."key" ASC LIMIT 1[0m  [[nil, "environment"]]
+  [1m[36mActiveRecord::InternalMetadata Create (1.2ms)[0m  [1m[32mINSERT INTO "ar_internal_metadata" ("key", "value", "created_at", "updated_at") VALUES ('environment', 'test', '2026-05-06 05:15:18.509367', '2026-05-06 05:15:18.509370') RETURNING "key"[0m
+  [1m[36mActiveRecord::InternalMetadata Load (0.3ms)[0m  [1m[34mSELECT * FROM "ar_internal_metadata" WHERE "ar_internal_metadata"."key" = $1 ORDER BY "ar_internal_metadata"."key" ASC LIMIT 1[0m  [[nil, "environment"]]
+  [1m[36mActiveRecord::InternalMetadata Load (0.3ms)[0m  [1m[34mSELECT * FROM "ar_internal_metadata" WHERE "ar_internal_metadata"."key" = $1 ORDER BY "ar_internal_metadata"."key" ASC LIMIT 1[0m  [[nil, "schema_sha1"]]
+  [1m[36mActiveRecord::InternalMetadata Create (1.1ms)[0m  [1m[32mINSERT INTO "ar_internal_metadata" ("key", "value", "created_at", "updated_at") VALUES ('schema_sha1', '676a5bc9a5a862c00818d95dc75bde458572599e', '2026-05-06 05:15:18.512818', '2026-05-06 05:15:18.512821') RETURNING "key"[0m
+  [1m[36mActiveRecord::SchemaMigration Load (0.7ms)[0m  [1m[34mSELECT "schema_migrations"."version" FROM "schema_migrations" ORDER BY "schema_migrations"."version" ASC[0m
+  [1m[36mTRANSACTION (0.2ms)[0m  [1m[35mBEGIN[0m
+  [1m[36mTRANSACTION (0.2ms)[0m  [1m[31mROLLBACK[0m
+  [1m[36mTRANSACTION (0.1ms)[0m  [1m[35mBEGIN[0m
+  [1m[36mTRANSACTION (0.1ms)[0m  [1m[31mROLLBACK[0m
+  [1m[36mTRANSACTION (0.2ms)[0m  [1m[35mBEGIN[0m
+  [1m[36mTRANSACTION (0.2ms)[0m  [1m[31mROLLBACK[0m
+  [1m[36mTRANSACTION (0.2ms)[0m  [1m[35mBEGIN[0m
+  [1m[36mTRANSACTION (0.2ms)[0m  [1m[31mROLLBACK[0m
+  [1m[36mTRANSACTION (0.2ms)[0m  [1m[35mBEGIN[0m
+  [1m[36mTRANSACTION (0.2ms)[0m  [1m[31mROLLBACK[0m
+  [1m[36mTRANSACTION (0.6ms)[0m  [1m[35mBEGIN[0m
+  [1m[36mTRANSACTION (0.3ms)[0m  [1m[31mROLLBACK[0m
+  [1m[36mTRANSACTION (0.2ms)[0m  [1m[35mBEGIN[0m
+  [1m[36mTRANSACTION (0.2ms)[0m  [1m[31mROLLBACK[0m
+  [1m[36mTRANSACTION (0.2ms)[0m  [1m[35mBEGIN[0m
+  [1m[36mTRANSACTION (0.3ms)[0m  [1m[31mROLLBACK[0m
+  [1m[36mTRANSACTION (0.2ms)[0m  [1m[35mBEGIN[0m
+  [1m[36mTRANSACTION (0.2ms)[0m  [1m[31mROLLBACK[0m
+  [1m[36mTRANSACTION (0.2ms)[0m  [1m[35mBEGIN[0m
+  [1m[36mTRANSACTION (0.2ms)[0m  [1m[31mROLLBACK[0m
+  [1m[36mTRANSACTION (2.6ms)[0m  [1m[35mBEGIN[0m
+  [1m[36mTRANSACTION (0.2ms)[0m  [1m[31mROLLBACK[0m
+  [1m[36mTRANSACTION (1.8ms)[0m  [1m[35mBEGIN[0m
+  [1m[36mTRANSACTION (0.2ms)[0m  [1m[31mROLLBACK[0m
+  [1m[36mTRANSACTION (0.5ms)[0m  [1m[35mBEGIN[0m
+  [1m[36mTRANSACTION (0.2ms)[0m  [1m[31mROLLBACK[0m
+  [1m[36mTRANSACTION (0.1ms)[0m  [1m[35mBEGIN[0m
+  [1m[36mTRANSACTION (0.2ms)[0m  [1m[31mROLLBACK[0m
+  [1m[36mTRANSACTION (0.2ms)[0m  [1m[35mBEGIN[0m
+  [1m[36mTRANSACTION (0.2ms)[0m  [1m[31mROLLBACK[0m
+  [1m[36mTRANSACTION (0.3ms)[0m  [1m[35mBEGIN[0m
+  [1m[36mEvent Load (1.2ms)[0m  [1m[34mSELECT "events".* FROM "events" WHERE "events"."external_id" = $1 LIMIT $2[0m  [["external_id", "billetto-123"], ["LIMIT", 1]]
+  [1m[36mTRANSACTION (0.4ms)[0m  [1m[31mROLLBACK[0m
+  [1m[36mTRANSACTION (1.3ms)[0m  [1m[35mBEGIN[0m
+  [1m[36mTRANSACTION (0.3ms)[0m  [1m[31mROLLBACK[0m
+  [1m[36mTRANSACTION (0.2ms)[0m  [1m[35mBEGIN[0m
+  [1m[36mTRANSACTION (0.2ms)[0m  [1m[31mROLLBACK[0m
+  [1m[36mTRANSACTION (0.2ms)[0m  [1m[35mBEGIN[0m
+  [1m[36mTRANSACTION (0.2ms)[0m  [1m[31mROLLBACK[0m
+  [1m[36mTRANSACTION (0.2ms)[0m  [1m[35mBEGIN[0m
+  [1m[36mTRANSACTION (2.4ms)[0m  [1m[31mROLLBACK[0m
+  [1m[36mTRANSACTION (0.3ms)[0m  [1m[35mBEGIN[0m
+  [1m[36mTRANSACTION (0.2ms)[0m  [1m[31mROLLBACK[0m
+  [1m[36mTRANSACTION (0.6ms)[0m  [1m[35mBEGIN[0m
+  [1m[36mTRANSACTION (2.4ms)[0m  [1m[31mROLLBACK[0m
+  [1m[36mTRANSACTION (0.2ms)[0m  [1m[35mBEGIN[0m
+  [1m[36mTRANSACTION (2.0ms)[0m  [1m[31mROLLBACK[0m
+  [1m[36mTRANSACTION (0.1ms)[0m  [1m[35mBEGIN[0m
+  [1m[36mTRANSACTION (0.2ms)[0m  [1m[31mROLLBACK[0m
+  [1m[36mTRANSACTION (0.2ms)[0m  [1m[35mBEGIN[0m
+  [1m[36mTRANSACTION (0.3ms)[0m  [1m[31mROLLBACK[0m
+  [1m[36mTRANSACTION (0.2ms)[0m  [1m[35mBEGIN[0m
+  [1m[36mTRANSACTION (0.2ms)[0m  [1m[31mROLLBACK[0m
+  [1m[36mTRANSACTION (0.2ms)[0m  [1m[35mBEGIN[0m
+  [1m[36mTRANSACTION (0.2ms)[0m  [1m[31mROLLBACK[0m
+  [1m[36mTRANSACTION (0.3ms)[0m  [1m[35mBEGIN[0m
+  [1m[36mEvent Load (0.5ms)[0m  [1m[34mSELECT "events".* FROM "events" WHERE "events"."external_id" = $1 LIMIT $2[0m  [["external_id", "non-existent-id"], ["LIMIT", 1]]
+  [1m[36mTRANSACTION (0.3ms)[0m  [1m[31mROLLBACK[0m
+  [1m[36mTRANSACTION (0.2ms)[0m  [1m[35mBEGIN[0m
+  [1m[36mTRANSACTION (0.2ms)[0m  [1m[31mROLLBACK[0m
+  [1m[36mTRANSACTION (0.2ms)[0m  [1m[35mBEGIN[0m
+  [1m[36mTRANSACTION (0.3ms)[0m  [1m[31mROLLBACK[0m
+  [1m[36mTRANSACTION (0.2ms)[0m  [1m[35mBEGIN[0m
+  [1m[36mTRANSACTION (0.2ms)[0m  [1m[31mROLLBACK[0m
+  [1m[36mTRANSACTION (0.2ms)[0m  [1m[35mBEGIN[0m
+  [1m[36mTRANSACTION (0.3ms)[0m  [1m[31mROLLBACK[0m
+  [1m[36mTRANSACTION (0.2ms)[0m  [1m[35mBEGIN[0m
+  [1m[36mTRANSACTION (0.2ms)[0m  [1m[31mROLLBACK[0m
+  [1m[36mTRANSACTION (0.1ms)[0m  [1m[35mBEGIN[0m
+  [1m[36mTRANSACTION (0.1ms)[0m  [1m[31mROLLBACK[0m
+  [1m[36mTRANSACTION (0.1ms)[0m  [1m[35mBEGIN[0m
+  [1m[36mTRANSACTION (0.1ms)[0m  [1m[31mROLLBACK[0m
+  [1m[36mTRANSACTION (0.1ms)[0m  [1m[35mBEGIN[0m
+  [1m[36mTRANSACTION (0.4ms)[0m  [1m[31mROLLBACK[0m
+  [1m[36mTRANSACTION (0.6ms)[0m  [1m[35mBEGIN[0m
+  [1m[36mTRANSACTION (0.2ms)[0m  [1m[31mROLLBACK[0m
+  [1m[36mActiveRecord::InternalMetadata Load (0.9ms)[0m  [1m[34mSELECT * FROM "ar_internal_metadata" WHERE "ar_internal_metadata"."key" = $1 ORDER BY "ar_internal_metadata"."key" ASC LIMIT 1[0m  [[nil, "schema_sha1"]]
+  [1m[36mActiveRecord::SchemaMigration Load (0.8ms)[0m  [1m[34mSELECT "schema_migrations"."version" FROM "schema_migrations" ORDER BY "schema_migrations"."version" ASC[0m
+  [1m[36mTRANSACTION (0.2ms)[0m  [1m[35mBEGIN[0m
+  [1m[36mTRANSACTION (0.3ms)[0m  [1m[31mROLLBACK[0m
+  [1m[36mActiveRecord::InternalMetadata Load (0.9ms)[0m  [1m[34mSELECT * FROM "ar_internal_metadata" WHERE "ar_internal_metadata"."key" = $1 ORDER BY "ar_internal_metadata"."key" ASC LIMIT 1[0m  [[nil, "schema_sha1"]]
+  [1m[36mActiveRecord::SchemaMigration Load (0.5ms)[0m  [1m[34mSELECT "schema_migrations"."version" FROM "schema_migrations" ORDER BY "schema_migrations"."version" ASC[0m
+  [1m[36mTRANSACTION (0.1ms)[0m  [1m[35mBEGIN[0m
+  [1m[36mTRANSACTION (0.2ms)[0m  [1m[31mROLLBACK[0m
+  [1m[36mTRANSACTION (0.4ms)[0m  [1m[35mBEGIN[0m
+  [1m[36mEvent Exists? (0.7ms)[0m  [1m[34mSELECT 1 AS one FROM "events" WHERE "events"."external_id" = $1 LIMIT $2[0m  [["external_id", "c2935acb-50d7-4852-93de-084c01eb6c46"], ["LIMIT", 1]]
+  [1m[36mTRANSACTION (0.3ms)[0m  [1m[31mROLLBACK[0m
+  [1m[36mTRANSACTION (0.2ms)[0m  [1m[35mBEGIN[0m
+  [1m[36mTRANSACTION (0.2ms)[0m  [1m[31mROLLBACK[0m
+  [1m[36mTRANSACTION (0.2ms)[0m  [1m[35mBEGIN[0m
+  [1m[36mTRANSACTION (0.1ms)[0m  [1m[31mROLLBACK[0m
+  [1m[36mTRANSACTION (0.1ms)[0m  [1m[35mBEGIN[0m
+  [1m[36mTRANSACTION (0.1ms)[0m  [1m[31mROLLBACK[0m
+  [1m[36mTRANSACTION (0.1ms)[0m  [1m[35mBEGIN[0m
+  [1m[36mTRANSACTION (0.2ms)[0m  [1m[31mROLLBACK[0m
+  [1m[36mTRANSACTION (0.1ms)[0m  [1m[35mBEGIN[0m
+  [1m[36mTRANSACTION (0.2ms)[0m  [1m[31mROLLBACK[0m
+  [1m[36mTRANSACTION (0.1ms)[0m  [1m[35mBEGIN[0m
+  [1m[36mTRANSACTION (0.2ms)[0m  [1m[31mROLLBACK[0m
+  [1m[36mTRANSACTION (0.2ms)[0m  [1m[35mBEGIN[0m
+  [1m[36mTRANSACTION (0.1ms)[0m  [1m[31mROLLBACK[0m
+  [1m[36mTRANSACTION (0.1ms)[0m  [1m[35mBEGIN[0m
+  [1m[36mTRANSACTION (0.2ms)[0m  [1m[31mROLLBACK[0m
+  [1m[36mTRANSACTION (0.5ms)[0m  [1m[35mBEGIN[0m
+  [1m[36mTRANSACTION (0.2ms)[0m  [1m[31mROLLBACK[0m
+  [1m[36mTRANSACTION (0.1ms)[0m  [1m[35mBEGIN[0m
+  [1m[36mEvent Load (1.3ms)[0m  [1m[34mSELECT "events".* FROM "events" WHERE "events"."external_id" = $1 LIMIT $2[0m  [["external_id", "billetto-123"], ["LIMIT", 1]]
+  [1m[36mTRANSACTION (0.3ms)[0m  [1m[31mROLLBACK[0m
+  [1m[36mTRANSACTION (0.1ms)[0m  [1m[35mBEGIN[0m
+  [1m[36mTRANSACTION (0.2ms)[0m  [1m[35mSAVEPOINT active_record_1[0m
+  [1m[36mEvent Exists? (0.6ms)[0m  [1m[34mSELECT 1 AS one FROM "events" WHERE "events"."external_id" = $1 LIMIT $2[0m  [["external_id", "billetto-123"], ["LIMIT", 1]]
+  [1m[36mEvent Create (0.9ms)[0m  [1m[32mINSERT INTO "events" ("created_at", "description", "downvotes_count", "end_date", "external_id", "image_url", "location", "price", "start_date", "title", "updated_at", "upvotes_count") VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12) RETURNING "id"[0m  [["created_at", "2026-05-06 05:16:44.404625"], ["description", "Quis et praesentium. Consectetur quod voluptas. Voluptas autem est."], ["downvotes_count", 4], ["end_date", "2026-06-04 16:45:14"], ["external_id", "billetto-123"], ["image_url", "http://johnson.test/humberto"], ["location", "Blickville, Missouri"], ["price", "33.11"], ["start_date", "2026-06-04 14:45:14"], ["title", "Old Title"], ["updated_at", "2026-05-06 05:16:44.404625"], ["upvotes_count", 33]]
+  [1m[36mTRANSACTION (0.2ms)[0m  [1m[35mRELEASE SAVEPOINT active_record_1[0m
+  [1m[36mEvent Load (1.2ms)[0m  [1m[34mSELECT "events".* FROM "events" WHERE "events"."external_id" = $1 LIMIT $2[0m  [["external_id", "billetto-123"], ["LIMIT", 1]]
+  [1m[36mTRANSACTION (0.4ms)[0m  [1m[31mROLLBACK[0m
+  [1m[36mTRANSACTION (0.3ms)[0m  [1m[35mBEGIN[0m
+  [1m[36mTRANSACTION (0.2ms)[0m  [1m[35mSAVEPOINT active_record_1[0m
+  [1m[36mEvent Exists? (0.8ms)[0m  [1m[34mSELECT 1 AS one FROM "events" WHERE "events"."external_id" = $1 LIMIT $2[0m  [["external_id", "billetto-123"], ["LIMIT", 1]]
+  [1m[36mEvent Create (0.6ms)[0m  [1m[32mINSERT INTO "events" ("created_at", "description", "downvotes_count", "end_date", "external_id", "image_url", "location", "price", "start_date", "title", "updated_at", "upvotes_count") VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12) RETURNING "id"[0m  [["created_at", "2026-05-06 05:16:44.416005"], ["description", "Repudiandae animi ut. Temporibus sit perspiciatis. Distinctio ipsum expedita."], ["downvotes_count", 16], ["end_date", "2026-06-05 15:40:53"], ["external_id", "billetto-123"], ["image_url", "http://padberg-kihn.test/adolph.cassin"], ["location", "Lake Cleohaven, Alabama"], ["price", "22.17"], ["start_date", "2026-06-05 13:40:53"], ["title", "Old Title"], ["updated_at", "2026-05-06 05:16:44.416005"], ["upvotes_count", 46]]
+  [1m[36mTRANSACTION (0.2ms)[0m  [1m[35mRELEASE SAVEPOINT active_record_1[0m
+  [1m[36mEvent Load (0.4ms)[0m  [1m[34mSELECT "events".* FROM "events" WHERE "events"."external_id" = $1 LIMIT $2[0m  [["external_id", "billetto-123"], ["LIMIT", 1]]
+  [1m[36mTRANSACTION (0.2ms)[0m  [1m[35mSAVEPOINT active_record_1[0m
+  [1m[36mEvent Update (0.8ms)[0m  [1m[33mUPDATE "events" SET "description" = $1, "end_date" = $2, "image_url" = $3, "location" = $4, "price" = $5, "start_date" = $6, "title" = $7, "updated_at" = $8 WHERE "events"."id" = $9[0m  [["description", "Test Description"], ["end_date", "2026-05-07 07:16:44.418312"], ["image_url", "https://example.com/image.jpg"], ["location", "Test Venue, Test City"], ["price", "25.5"], ["start_date", "2026-05-07 05:16:44.418206"], ["title", "Test Event"], ["updated_at", "2026-05-06 05:16:44.424035"], ["id", 2]]
+  [1m[36mTRANSACTION (0.2ms)[0m  [1m[35mRELEASE SAVEPOINT active_record_1[0m
+  [1m[36mTRANSACTION (0.2ms)[0m  [1m[31mROLLBACK[0m
+  [1m[36mActiveRecord::InternalMetadata Load (0.7ms)[0m  [1m[34mSELECT * FROM "ar_internal_metadata" WHERE "ar_internal_metadata"."key" = $1 ORDER BY "ar_internal_metadata"."key" ASC LIMIT 1[0m  [[nil, "schema_sha1"]]
+  [1m[36mActiveRecord::SchemaMigration Load (0.8ms)[0m  [1m[34mSELECT "schema_migrations"."version" FROM "schema_migrations" ORDER BY "schema_migrations"."version" ASC[0m
+  [1m[36mTRANSACTION (0.1ms)[0m  [1m[35mBEGIN[0m
+  [1m[36mEvent Exists? (0.6ms)[0m  [1m[34mSELECT 1 AS one FROM "events" WHERE "events"."external_id" = $1 LIMIT $2[0m  [["external_id", "bb650a6b-e196-4d0d-8b9d-ec5ca420e324"], ["LIMIT", 1]]
+  [1m[36mTRANSACTION (0.6ms)[0m  [1m[31mROLLBACK[0m
+  [1m[36mTRANSACTION (0.1ms)[0m  [1m[35mBEGIN[0m
+  [1m[36mEvent Exists? (0.3ms)[0m  [1m[34mSELECT 1 AS one FROM "events" WHERE "events"."external_id" = $1 LIMIT $2[0m  [["external_id", "b4dc3596-4163-4f5e-ae6a-a6e2d738715b"], ["LIMIT", 1]]
+  [1m[36mTRANSACTION (0.2ms)[0m  [1m[31mROLLBACK[0m
+  [1m[36mTRANSACTION (0.2ms)[0m  [1m[35mBEGIN[0m
+  [1m[36mEvent Exists? (0.3ms)[0m  [1m[34mSELECT 1 AS one FROM "events" WHERE "events"."external_id" IS NULL LIMIT $1[0m  [["LIMIT", 1]]
+  [1m[36mTRANSACTION (0.2ms)[0m  [1m[31mROLLBACK[0m
+  [1m[36mTRANSACTION (0.1ms)[0m  [1m[35mBEGIN[0m
+  [1m[36mTRANSACTION (0.2ms)[0m  [1m[35mSAVEPOINT active_record_1[0m
+  [1m[36mEvent Exists? (0.6ms)[0m  [1m[34mSELECT 1 AS one FROM "events" WHERE "events"."external_id" = $1 LIMIT $2[0m  [["external_id", "test-123"], ["LIMIT", 1]]
+  [1m[36mEvent Create (1.1ms)[0m  [1m[32mINSERT INTO "events" ("created_at", "description", "downvotes_count", "end_date", "external_id", "image_url", "location", "price", "start_date", "title", "updated_at", "upvotes_count") VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12) RETURNING "id"[0m  [["created_at", "2026-05-06 05:17:04.548355"], ["description", "Ipsum earum corporis. Dolores ut sit. Dignissimos molestiae ut."], ["downvotes_count", 11], ["end_date", "2026-06-03 16:56:56"], ["external_id", "test-123"], ["image_url", "http://gibson-kassulke.test/justine"], ["location", "McLaughlinhaven, Minnesota"], ["price", "56.53"], ["start_date", "2026-06-03 14:56:56"], ["title", "Distinctio dolorem quo."], ["updated_at", "2026-05-06 05:17:04.548355"], ["upvotes_count", 16]]
+  [1m[36mTRANSACTION (0.2ms)[0m  [1m[35mRELEASE SAVEPOINT active_record_1[0m
+  [1m[36mEvent Exists? (0.5ms)[0m  [1m[34mSELECT 1 AS one FROM "events" WHERE "events"."external_id" = $1 LIMIT $2[0m  [["external_id", "test-123"], ["LIMIT", 1]]
+  [1m[36mTRANSACTION (0.2ms)[0m  [1m[31mROLLBACK[0m
+  [1m[36mTRANSACTION (0.1ms)[0m  [1m[35mBEGIN[0m
+  [1m[36mTRANSACTION (0.2ms)[0m  [1m[35mSAVEPOINT active_record_1[0m
+  [1m[36mEvent Exists? (0.8ms)[0m  [1m[34mSELECT 1 AS one FROM "events" WHERE "events"."external_id" = $1 LIMIT $2[0m  [["external_id", "16ee604e-051a-4a57-a7e9-072ae44093cd"], ["LIMIT", 1]]
+  [1m[36mEvent Create (0.5ms)[0m  [1m[32mINSERT INTO "events" ("created_at", "description", "downvotes_count", "end_date", "external_id", "image_url", "location", "price", "start_date", "title", "updated_at", "upvotes_count") VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12) RETURNING "id"[0m  [["created_at", "2026-05-06 05:17:04.559804"], ["description", "Eius est veritatis. Nihil et veniam. Ad quia magni."], ["downvotes_count", 15], ["end_date", "2026-05-07 07:17:04.556770"], ["external_id", "16ee604e-051a-4a57-a7e9-072ae44093cd"], ["image_url", "http://hyatt.example/abel"], ["location", "North Sylviahaven, Mississippi"], ["price", "93.73"], ["start_date", "2026-05-07 05:17:04.556770"], ["title", "Voluptatem eius omnis."], ["updated_at", "2026-05-06 05:17:04.559804"], ["upvotes_count", 12]]
+  [1m[36mTRANSACTION (0.2ms)[0m  [1m[35mRELEASE SAVEPOINT active_record_1[0m
+  [1m[36mTRANSACTION (0.2ms)[0m  [1m[35mSAVEPOINT active_record_1[0m
+  [1m[36mEvent Exists? (0.9ms)[0m  [1m[34mSELECT 1 AS one FROM "events" WHERE "events"."external_id" = $1 LIMIT $2[0m  [["external_id", "e170ead0-51ee-4691-b082-1bff9cd730e7"], ["LIMIT", 1]]
+  [1m[36mEvent Create (0.5ms)[0m  [1m[32mINSERT INTO "events" ("created_at", "description", "downvotes_count", "end_date", "external_id", "image_url", "location", "price", "start_date", "title", "updated_at", "upvotes_count") VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12) RETURNING "id"[0m  [["created_at", "2026-05-06 05:17:04.564988"], ["description", "Mollitia labore quam. Laudantium in nulla. Quibusdam ducimus iste."], ["downvotes_count", 7], ["end_date", "2026-05-05 07:17:04.562055"], ["external_id", "e170ead0-51ee-4691-b082-1bff9cd730e7"], ["image_url", "http://metz.test/crysta"], ["location", "Patricabury, Nebraska"], ["price", "12.87"], ["start_date", "2026-05-05 05:17:04.562055"], ["title", "Ut tenetur repellendus."], ["updated_at", "2026-05-06 05:17:04.564988"], ["upvotes_count", 6]]
+  [1m[36mTRANSACTION (0.3ms)[0m  [1m[35mRELEASE SAVEPOINT active_record_1[0m
+  [1m[36mEvent Exists? (0.7ms)[0m  [1m[34mSELECT 1 AS one FROM "events" WHERE (start_date > $1) AND "events"."id" = $2 LIMIT $3[0m  [[nil, "2026-05-06 05:17:04.567754"], ["id", 4], ["LIMIT", 1]]
+  [1m[36mEvent Exists? (0.4ms)[0m  [1m[34mSELECT 1 AS one FROM "events" WHERE (start_date > $1) AND "events"."id" = $2 LIMIT $3[0m  [[nil, "2026-05-06 05:17:04.569605"], ["id", 5], ["LIMIT", 1]]
+  [1m[36mEvent Load (0.4ms)[0m  [1m[34mSELECT "events".* FROM "events" WHERE (start_date > $1)[0m  [[nil, "2026-05-06 05:17:04.569605"]]
+  [1m[36mTRANSACTION (0.2ms)[0m  [1m[31mROLLBACK[0m
+  [1m[36mTRANSACTION (0.1ms)[0m  [1m[35mBEGIN[0m
+  [1m[36mTRANSACTION (0.2ms)[0m  [1m[35mSAVEPOINT active_record_1[0m
+  [1m[36mEvent Exists? (0.7ms)[0m  [1m[34mSELECT 1 AS one FROM "events" WHERE "events"."external_id" = $1 LIMIT $2[0m  [["external_id", "4c023005-a8ec-48a4-b007-f9f92fe92d6a"], ["LIMIT", 1]]
+  [1m[36mEvent Create (0.5ms)[0m  [1m[32mINSERT INTO "events" ("created_at", "description", "downvotes_count", "end_date", "external_id", "image_url", "location", "price", "start_date", "title", "updated_at", "upvotes_count") VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12) RETURNING "id"[0m  [["created_at", "2026-05-06 05:17:04.577905"], ["description", "Voluptatem omnis possimus. Rerum accusantium voluptatem. Quasi sit repellendus."], ["downvotes_count", 14], ["end_date", "2026-05-07 07:17:04.573779"], ["external_id", "4c023005-a8ec-48a4-b007-f9f92fe92d6a"], ["image_url", "http://carroll.test/carson_rempel"], ["location", "Dougville, New Mexico"], ["price", "93.98"], ["start_date", "2026-05-07 05:17:04.573779"], ["title", "Totam eaque voluptatem."], ["updated_at", "2026-05-06 05:17:04.577905"], ["upvotes_count", 37]]
+  [1m[36mTRANSACTION (0.2ms)[0m  [1m[35mRELEASE SAVEPOINT active_record_1[0m
+  [1m[36mTRANSACTION (0.3ms)[0m  [1m[35mSAVEPOINT active_record_1[0m
+  [1m[36mEvent Exists? (0.8ms)[0m  [1m[34mSELECT 1 AS one FROM "events" WHERE "events"."external_id" = $1 LIMIT $2[0m  [["external_id", "a9b88262-695d-4334-a0f2-9ae870ef401f"], ["LIMIT", 1]]
+  [1m[36mEvent Create (0.4ms)[0m  [1m[32mINSERT INTO "events" ("created_at", "description", "downvotes_count", "end_date", "external_id", "image_url", "location", "price", "start_date", "title", "updated_at", "upvotes_count") VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12) RETURNING "id"[0m  [["created_at", "2026-05-06 05:17:04.584656"], ["description", "Facere autem asperiores. Voluptas sapiente est. Ullam qui aut."], ["downvotes_count", 12], ["end_date", "2026-05-05 07:17:04.580445"], ["external_id", "a9b88262-695d-4334-a0f2-9ae870ef401f"], ["image_url", "http://zieme-mccullough.test/rossie_bashirian"], ["location", "Somouth, Kansas"], ["price", "9.67"], ["start_date", "2026-05-05 05:17:04.580445"], ["title", "Non omnis vero."], ["updated_at", "2026-05-06 05:17:04.584656"], ["upvotes_count", 15]]
+  [1m[36mTRANSACTION (0.2ms)[0m  [1m[35mRELEASE SAVEPOINT active_record_1[0m
+  [1m[36mEvent Exists? (0.4ms)[0m  [1m[34mSELECT 1 AS one FROM "events" WHERE (start_date <= $1) AND "events"."id" = $2 LIMIT $3[0m  [[nil, "2026-05-06 05:17:04.586872"], ["id", 7], ["LIMIT", 1]]
+  [1m[36mEvent Exists? (0.3ms)[0m  [1m[34mSELECT 1 AS one FROM "events" WHERE (start_date <= $1) AND "events"."id" = $2 LIMIT $3[0m  [[nil, "2026-05-06 05:17:04.587944"], ["id", 6], ["LIMIT", 1]]
+  [1m[36mEvent Load (0.4ms)[0m  [1m[34mSELECT "events".* FROM "events" WHERE (start_date <= $1)[0m  [[nil, "2026-05-06 05:17:04.587944"]]
+  [1m[36mTRANSACTION (0.2ms)[0m  [1m[31mROLLBACK[0m
+  [1m[36mTRANSACTION (0.1ms)[0m  [1m[35mBEGIN[0m
+  [1m[36mTRANSACTION (0.7ms)[0m  [1m[35mSAVEPOINT active_record_1[0m
+  [1m[36mEvent Exists? (2.5ms)[0m  [1m[34mSELECT 1 AS one FROM "events" WHERE "events"."external_id" = $1 LIMIT $2[0m  [["external_id", "87220627-4c17-46de-81fd-4f959f9358b7"], ["LIMIT", 1]]
+  [1m[36mEvent Create (3.5ms)[0m  [1m[32mINSERT INTO "events" ("created_at", "description", "downvotes_count", "end_date", "external_id", "image_url", "location", "price", "start_date", "title", "updated_at", "upvotes_count") VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12) RETURNING "id"[0m  [["created_at", "2026-05-06 05:17:04.597701"], ["description", "Cum aut quod. Excepturi labore officiis. Error ullam consectetur."], ["downvotes_count", 18], ["end_date", "2026-05-07 07:17:04.591679"], ["external_id", "87220627-4c17-46de-81fd-4f959f9358b7"], ["image_url", "http://cormier.test/zada.bayer"], ["location", "Carmellaburgh, Georgia"], ["price", "94.81"], ["start_date", "2026-05-07 05:17:04.591679"], ["title", "Praesentium ratione cum."], ["updated_at", "2026-05-06 05:17:04.597701"], ["upvotes_count", 37]]
+  [1m[36mTRANSACTION (0.3ms)[0m  [1m[35mRELEASE SAVEPOINT active_record_1[0m
+  [1m[36mTRANSACTION (0.3ms)[0m  [1m[35mSAVEPOINT active_record_1[0m
+  [1m[36mEvent Exists? (1.0ms)[0m  [1m[34mSELECT 1 AS one FROM "events" WHERE "events"."external_id" = $1 LIMIT $2[0m  [["external_id", "76f98dcd-fccf-44a2-ab4a-a7e14458a96d"], ["LIMIT", 1]]
+  [1m[36mEvent Create (0.5ms)[0m  [1m[32mINSERT INTO "events" ("created_at", "description", "downvotes_count", "end_date", "external_id", "image_url", "location", "price", "start_date", "title", "updated_at", "upvotes_count") VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12) RETURNING "id"[0m  [["created_at", "2026-05-06 05:17:04.608796"], ["description", "Veritatis perspiciatis ea. Id quia non. Quas sed et."], ["downvotes_count", 19], ["end_date", "2026-05-05 07:17:04.603261"], ["external_id", "76f98dcd-fccf-44a2-ab4a-a7e14458a96d"], ["image_url", "http://parisian-brakus.example/eric"], ["location", "Jackburgh, Colorado"], ["price", "29.13"], ["start_date", "2026-05-05 05:17:04.603261"], ["title", "Ut harum aperiam."], ["updated_at", "2026-05-06 05:17:04.608796"], ["upvotes_count", 25]]
+  [1m[36mTRANSACTION (0.2ms)[0m  [1m[35mRELEASE SAVEPOINT active_record_1[0m
+  [1m[36mTRANSACTION (0.2ms)[0m  [1m[31mROLLBACK[0m
+  [1m[36mTRANSACTION (0.2ms)[0m  [1m[35mBEGIN[0m
+  [1m[36mTRANSACTION (0.3ms)[0m  [1m[35mSAVEPOINT active_record_1[0m
+  [1m[36mEvent Exists? (0.7ms)[0m  [1m[34mSELECT 1 AS one FROM "events" WHERE "events"."external_id" = $1 LIMIT $2[0m  [["external_id", "7d8bb460-bf13-4de8-8f38-0b58f622d52a"], ["LIMIT", 1]]
+  [1m[36mEvent Create (0.5ms)[0m  [1m[32mINSERT INTO "events" ("created_at", "description", "downvotes_count", "end_date", "external_id", "image_url", "location", "price", "start_date", "title", "updated_at", "upvotes_count") VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12) RETURNING "id"[0m  [["created_at", "2026-05-06 05:17:04.617333"], ["description", "Et quo aut. Culpa neque quae. Nisi recusandae et."], ["downvotes_count", 10], ["end_date", "2026-05-07 07:17:04.613598"], ["external_id", "7d8bb460-bf13-4de8-8f38-0b58f622d52a"], ["image_url", "http://boehm.test/natalya.damore"], ["location", "Bernierbury, Iowa"], ["price", "63.21"], ["start_date", "2026-05-07 05:17:04.613598"], ["title", "Blanditiis ad inventore."], ["updated_at", "2026-05-06 05:17:04.617333"], ["upvotes_count", 33]]
+  [1m[36mTRANSACTION (0.2ms)[0m  [1m[35mRELEASE SAVEPOINT active_record_1[0m
+  [1m[36mTRANSACTION (0.3ms)[0m  [1m[35mSAVEPOINT active_record_1[0m
+  [1m[36mEvent Exists? (1.0ms)[0m  [1m[34mSELECT 1 AS one FROM "events" WHERE "events"."external_id" = $1 LIMIT $2[0m  [["external_id", "e00d6cc7-bf06-46ca-8b84-611927741786"], ["LIMIT", 1]]
+  [1m[36mEvent Create (0.5ms)[0m  [1m[32mINSERT INTO "events" ("created_at", "description", "downvotes_count", "end_date", "external_id", "image_url", "location", "price", "start_date", "title", "updated_at", "upvotes_count") VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12) RETURNING "id"[0m  [["created_at", "2026-05-06 05:17:04.623671"], ["description", "Et ea qui. Qui aut voluptas. Ab molestiae totam."], ["downvotes_count", 7], ["end_date", "2026-05-05 07:17:04.619435"], ["external_id", "e00d6cc7-bf06-46ca-8b84-611927741786"], ["image_url", "http://batz-padberg.example/mel_gleichner"], ["location", "Timmyville, Virginia"], ["price", "94.34"], ["start_date", "2026-05-05 05:17:04.619435"], ["title", "Pariatur dignissimos sint."], ["updated_at", "2026-05-06 05:17:04.623671"], ["upvotes_count", 9]]
+  [1m[36mTRANSACTION (0.2ms)[0m  [1m[35mRELEASE SAVEPOINT active_record_1[0m
+  [1m[36mTRANSACTION (0.3ms)[0m  [1m[31mROLLBACK[0m
+  [1m[36mTRANSACTION (0.1ms)[0m  [1m[35mBEGIN[0m
+  [1m[36mTRANSACTION (0.3ms)[0m  [1m[35mSAVEPOINT active_record_1[0m
+  [1m[36mEvent Exists? (0.7ms)[0m  [1m[34mSELECT 1 AS one FROM "events" WHERE "events"."external_id" = $1 LIMIT $2[0m  [["external_id", "df87fa4f-68a2-419e-a0c8-e0dcd2d069c3"], ["LIMIT", 1]]
+  [1m[36mEvent Create (0.4ms)[0m  [1m[32mINSERT INTO "events" ("created_at", "description", "downvotes_count", "end_date", "external_id", "image_url", "location", "price", "start_date", "title", "updated_at", "upvotes_count") VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12) RETURNING "id"[0m  [["created_at", "2026-05-06 05:17:04.632513"], ["description", "Dolorum et beatae. Voluptatem nihil quis. Repellendus ratione harum."], ["downvotes_count", 19], ["end_date", "2026-05-07 07:17:04.628618"], ["external_id", "df87fa4f-68a2-419e-a0c8-e0dcd2d069c3"], ["image_url", "http://botsford-beatty.test/richard"], ["location", "South Dominick, Nevada"], ["price", "47.1"], ["start_date", "2026-05-07 05:17:04.628618"], ["title", "Modi omnis odio."], ["updated_at", "2026-05-06 05:17:04.632513"], ["upvotes_count", 23]]
+  [1m[36mTRANSACTION (0.2ms)[0m  [1m[35mRELEASE SAVEPOINT active_record_1[0m
+  [1m[36mTRANSACTION (0.6ms)[0m  [1m[35mSAVEPOINT active_record_1[0m
+  [1m[36mEvent Exists? (1.3ms)[0m  [1m[34mSELECT 1 AS one FROM "events" WHERE "events"."external_id" = $1 LIMIT $2[0m  [["external_id", "79f1b328-5644-46b7-87d0-1319ad59c3cd"], ["LIMIT", 1]]
+  [1m[36mEvent Create (0.6ms)[0m  [1m[32mINSERT INTO "events" ("created_at", "description", "downvotes_count", "end_date", "external_id", "image_url", "location", "price", "start_date", "title", "updated_at", "upvotes_count") VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12) RETURNING "id"[0m  [["created_at", "2026-05-06 05:17:04.639220"], ["description", "Autem molestiae iure. Voluptatem animi laudantium. Doloribus et sunt."], ["downvotes_count", 6], ["end_date", "2026-05-05 07:17:04.634680"], ["external_id", "79f1b328-5644-46b7-87d0-1319ad59c3cd"], ["image_url", "http://schulist.example/courtney"], ["location", "North Betsy, Georgia"], ["price", "79.56"], ["start_date", "2026-05-05 05:17:04.634680"], ["title", "Excepturi tempore et."], ["updated_at", "2026-05-06 05:17:04.639220"], ["upvotes_count", 26]]
+  [1m[36mTRANSACTION (0.2ms)[0m  [1m[35mRELEASE SAVEPOINT active_record_1[0m
+  [1m[36mTRANSACTION (0.2ms)[0m  [1m[31mROLLBACK[0m
+  [1m[36mTRANSACTION (0.1ms)[0m  [1m[35mBEGIN[0m
+  [1m[36mTRANSACTION (0.3ms)[0m  [1m[35mSAVEPOINT active_record_1[0m
+  [1m[36mEvent Exists? (0.7ms)[0m  [1m[34mSELECT 1 AS one FROM "events" WHERE "events"."external_id" = $1 LIMIT $2[0m  [["external_id", "683b29aa-b5b6-4e40-8233-c3814068b0c0"], ["LIMIT", 1]]
+  [1m[36mEvent Create (0.7ms)[0m  [1m[32mINSERT INTO "events" ("created_at", "description", "downvotes_count", "end_date", "external_id", "image_url", "location", "price", "start_date", "title", "updated_at", "upvotes_count") VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12) RETURNING "id"[0m  [["created_at", "2026-05-06 05:17:04.647765"], ["description", "Quasi rerum autem. Ut temporibus quo. Culpa et corrupti."], ["downvotes_count", 17], ["end_date", "2026-05-07 07:17:04.643794"], ["external_id", "683b29aa-b5b6-4e40-8233-c3814068b0c0"], ["image_url", "http://spinka.test/delmer"], ["location", "Borerstad, Virginia"], ["price", "34.31"], ["start_date", "2026-05-07 05:17:04.643794"], ["title", "Deserunt molestias excepturi."], ["updated_at", "2026-05-06 05:17:04.647765"], ["upvotes_count", 33]]
+  [1m[36mTRANSACTION (0.4ms)[0m  [1m[35mRELEASE SAVEPOINT active_record_1[0m
+  [1m[36mTRANSACTION (0.3ms)[0m  [1m[35mSAVEPOINT active_record_1[0m
+  [1m[36mEvent Exists? (0.9ms)[0m  [1m[34mSELECT 1 AS one FROM "events" WHERE "events"."external_id" = $1 LIMIT $2[0m  [["external_id", "d4df12d3-a37e-4eb3-9a60-b0eddf588797"], ["LIMIT", 1]]
+  [1m[36mEvent Create (0.4ms)[0m  [1m[32mINSERT INTO "events" ("created_at", "description", "downvotes_count", "end_date", "external_id", "image_url", "location", "price", "start_date", "title", "updated_at", "upvotes_count") VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12) RETURNING "id"[0m  [["created_at", "2026-05-06 05:17:04.654742"], ["description", "Nobis provident enim. Sed culpa quibusdam. Est nihil sapiente."], ["downvotes_count", 4], ["end_date", "2026-05-05 07:17:04.650733"], ["external_id", "d4df12d3-a37e-4eb3-9a60-b0eddf588797"], ["image_url", "http://mcglynn.example/lannie"], ["location", "New Geraldoview, Texas"], ["price", "65.26"], ["start_date", "2026-05-05 05:17:04.650733"], ["title", "Occaecati et qui."], ["updated_at", "2026-05-06 05:17:04.654742"], ["upvotes_count", 44]]
+  [1m[36mTRANSACTION (0.2ms)[0m  [1m[35mRELEASE SAVEPOINT active_record_1[0m
+  [1m[36mTRANSACTION (0.1ms)[0m  [1m[31mROLLBACK[0m
+  [1m[36mTRANSACTION (0.1ms)[0m  [1m[35mBEGIN[0m
+  [1m[36mTRANSACTION (0.4ms)[0m  [1m[35mSAVEPOINT active_record_1[0m
+  [1m[36mEvent Exists? (1.9ms)[0m  [1m[34mSELECT 1 AS one FROM "events" WHERE "events"."external_id" = $1 LIMIT $2[0m  [["external_id", "f6c02953-7efc-4d12-8c5b-48fabdfcc5f7"], ["LIMIT", 1]]
+  [1m[36mEvent Create (0.5ms)[0m  [1m[32mINSERT INTO "events" ("created_at", "description", "downvotes_count", "end_date", "external_id", "image_url", "location", "price", "start_date", "title", "updated_at", "upvotes_count") VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12) RETURNING "id"[0m  [["created_at", "2026-05-06 05:17:04.662198"], ["description", "Error soluta aliquid. Harum sint porro. Odio molestias similique."], ["downvotes_count", 14], ["end_date", "2026-05-07 07:17:04.658089"], ["external_id", "f6c02953-7efc-4d12-8c5b-48fabdfcc5f7"], ["image_url", "http://carroll-kozey.test/robt"], ["location", "Georgettashire, Wisconsin"], ["price", "89.89"], ["start_date", "2026-05-07 05:17:04.658089"], ["title", "Et quia illo."], ["updated_at", "2026-05-06 05:17:04.662198"], ["upvotes_count", 47]]
+  [1m[36mTRANSACTION (0.2ms)[0m  [1m[35mRELEASE SAVEPOINT active_record_1[0m
+  [1m[36mTRANSACTION (0.3ms)[0m  [1m[35mSAVEPOINT active_record_1[0m
+  [1m[36mEvent Exists? (0.8ms)[0m  [1m[34mSELECT 1 AS one FROM "events" WHERE "events"."external_id" = $1 LIMIT $2[0m  [["external_id", "ec17f009-183f-4544-a2ea-7b94f8312625"], ["LIMIT", 1]]
+  [1m[36mEvent Create (0.5ms)[0m  [1m[32mINSERT INTO "events" ("created_at", "description", "downvotes_count", "end_date", "external_id", "image_url", "location", "price", "start_date", "title", "updated_at", "upvotes_count") VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12) RETURNING "id"[0m  [["created_at", "2026-05-06 05:17:04.669210"], ["description", "Repellat sit dolor. Nobis sit iusto. Qui ipsam totam."], ["downvotes_count", 2], ["end_date", "2026-05-05 07:17:04.664761"], ["external_id", "ec17f009-183f-4544-a2ea-7b94f8312625"], ["image_url", "http://bartell.test/sheri.homenick"], ["location", "Jermaineport, Alabama"], ["price", "5.87"], ["start_date", "2026-05-05 05:17:04.664761"], ["title", "Consequatur rerum nihil."], ["updated_at", "2026-05-06 05:17:04.669210"], ["upvotes_count", 21]]
+  [1m[36mTRANSACTION (0.2ms)[0m  [1m[35mRELEASE SAVEPOINT active_record_1[0m
+  [1m[36mTRANSACTION (0.2ms)[0m  [1m[35mSAVEPOINT active_record_1[0m
+  [1m[36mEvent Exists? (0.7ms)[0m  [1m[34mSELECT 1 AS one FROM "events" WHERE "events"."external_id" = $1 LIMIT $2[0m  [["external_id", "f577afa7-a395-418e-8a1b-8af5cd1c3423"], ["LIMIT", 1]]
+  [1m[36mEvent Create (0.4ms)[0m  [1m[32mINSERT INTO "events" ("created_at", "description", "downvotes_count", "end_date", "external_id", "image_url", "location", "price", "start_date", "title", "updated_at", "upvotes_count") VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12) RETURNING "id"[0m  [["created_at", "2026-05-06 05:17:04.676042"], ["description", "Eius nisi eos. Voluptatibus est nam. Est iusto labore."], ["downvotes_count", 5], ["end_date", "2026-05-09 15:00:15"], ["external_id", "f577afa7-a395-418e-8a1b-8af5cd1c3423"], ["image_url", "http://marks.test/avelina"], ["location", "East Jeromyfurt, Utah"], ["price", "7.37"], ["start_date", "2026-05-09 13:00:15"], ["title", "Rerum harum qui."], ["updated_at", "2026-05-06 05:17:04.676042"], ["upvotes_count", 10]]
+  [1m[36mTRANSACTION (0.2ms)[0m  [1m[35mRELEASE SAVEPOINT active_record_1[0m
+  [1m[36mTRANSACTION (0.3ms)[0m  [1m[31mROLLBACK[0m
+  [1m[36mTRANSACTION (0.2ms)[0m  [1m[35mBEGIN[0m
+  [1m[36mEvent Load (0.6ms)[0m  [1m[34mSELECT "events".* FROM "events" WHERE "events"."external_id" = $1 LIMIT $2[0m  [["external_id", "billetto-123"], ["LIMIT", 1]]
+  [1m[36mTRANSACTION (0.3ms)[0m  [1m[31mROLLBACK[0m
+  [1m[36mTRANSACTION (0.1ms)[0m  [1m[35mBEGIN[0m
+  [1m[36mTRANSACTION (0.3ms)[0m  [1m[35mSAVEPOINT active_record_1[0m
+  [1m[36mEvent Exists? (1.1ms)[0m  [1m[34mSELECT 1 AS one FROM "events" WHERE "events"."external_id" = $1 LIMIT $2[0m  [["external_id", "billetto-123"], ["LIMIT", 1]]
+  [1m[36mEvent Create (0.8ms)[0m  [1m[32mINSERT INTO "events" ("created_at", "description", "downvotes_count", "end_date", "external_id", "image_url", "location", "price", "start_date", "title", "updated_at", "upvotes_count") VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12) RETURNING "id"[0m  [["created_at", "2026-05-06 05:17:04.693752"], ["description", "Sequi nobis tenetur. Ab amet porro. Est nesciunt quia."], ["downvotes_count", 8], ["end_date", "2026-05-28 13:56:12"], ["external_id", "billetto-123"], ["image_url", "http://schaden.example/nicolle"], ["location", "Jewelhaven, Indiana"], ["price", "21.42"], ["start_date", "2026-05-28 11:56:12"], ["title", "Old Title"], ["updated_at", "2026-05-06 05:17:04.693752"], ["upvotes_count", 15]]
+  [1m[36mTRANSACTION (0.5ms)[0m  [1m[35mRELEASE SAVEPOINT active_record_1[0m
+  [1m[36mEvent Load (0.5ms)[0m  [1m[34mSELECT "events".* FROM "events" WHERE "events"."external_id" = $1 LIMIT $2[0m  [["external_id", "billetto-123"], ["LIMIT", 1]]
+  [1m[36mTRANSACTION (0.2ms)[0m  [1m[31mROLLBACK[0m
+  [1m[36mTRANSACTION (0.1ms)[0m  [1m[35mBEGIN[0m
+  [1m[36mTRANSACTION (0.2ms)[0m  [1m[35mSAVEPOINT active_record_1[0m
+  [1m[36mEvent Exists? (0.9ms)[0m  [1m[34mSELECT 1 AS one FROM "events" WHERE "events"."external_id" = $1 LIMIT $2[0m  [["external_id", "billetto-123"], ["LIMIT", 1]]
+  [1m[36mEvent Create (0.8ms)[0m  [1m[32mINSERT INTO "events" ("created_at", "description", "downvotes_count", "end_date", "external_id", "image_url", "location", "price", "start_date", "title", "updated_at", "upvotes_count") VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12) RETURNING "id"[0m  [["created_at", "2026-05-06 05:17:04.704051"], ["description", "Aut quasi esse. Sapiente nemo est. Iure nobis ipsam."], ["downvotes_count", 4], ["end_date", "2026-05-19 14:14:46"], ["external_id", "billetto-123"], ["image_url", "http://spinka-oconner.test/natividad.farrell"], ["location", "South Lawrencehaven, Washington"], ["price", "7.08"], ["start_date", "2026-05-19 12:14:46"], ["title", "Old Title"], ["updated_at", "2026-05-06 05:17:04.704051"], ["upvotes_count", 38]]
+  [1m[36mTRANSACTION (0.3ms)[0m  [1m[35mRELEASE SAVEPOINT active_record_1[0m
+  [1m[36mEvent Load (0.4ms)[0m  [1m[34mSELECT "events".* FROM "events" WHERE "events"."external_id" = $1 LIMIT $2[0m  [["external_id", "billetto-123"], ["LIMIT", 1]]
+  [1m[36mTRANSACTION (0.2ms)[0m  [1m[35mSAVEPOINT active_record_1[0m
+  [1m[36mEvent Update (0.5ms)[0m  [1m[33mUPDATE "events" SET "description" = $1, "end_date" = $2, "image_url" = $3, "location" = $4, "price" = $5, "start_date" = $6, "title" = $7, "updated_at" = $8 WHERE "events"."id" = $9[0m  [["description", "Test Description"], ["end_date", "2026-05-07 07:17:04.707099"], ["image_url", "https://example.com/image.jpg"], ["location", "Test Venue, Test City"], ["price", "25.5"], ["start_date", "2026-05-07 05:17:04.706943"], ["title", "Test Event"], ["updated_at", "2026-05-06 05:17:04.712571"], ["id", 20]]
+  [1m[36mTRANSACTION (0.2ms)[0m  [1m[35mRELEASE SAVEPOINT active_record_1[0m
+  [1m[36mTRANSACTION (0.2ms)[0m  [1m[31mROLLBACK[0m
+  [1m[36mActiveRecord::InternalMetadata Load (0.9ms)[0m  [1m[34mSELECT * FROM "ar_internal_metadata" WHERE "ar_internal_metadata"."key" = $1 ORDER BY "ar_internal_metadata"."key" ASC LIMIT 1[0m  [[nil, "schema_sha1"]]
+  [1m[36mActiveRecord::SchemaMigration Load (0.8ms)[0m  [1m[34mSELECT "schema_migrations"."version" FROM "schema_migrations" ORDER BY "schema_migrations"."version" ASC[0m
+  [1m[36mTRANSACTION (0.2ms)[0m  [1m[35mBEGIN[0m
+  [1m[36mEvent Exists? (0.6ms)[0m  [1m[34mSELECT 1 AS one FROM "events" WHERE "events"."external_id" = $1 LIMIT $2[0m  [["external_id", "d7da7e6e-f21c-44fa-b784-9fb011ae87eb"], ["LIMIT", 1]]
+  [1m[36mTRANSACTION (0.3ms)[0m  [1m[31mROLLBACK[0m

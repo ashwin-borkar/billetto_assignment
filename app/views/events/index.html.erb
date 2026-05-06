@@ -1,0 +1,77 @@
+<div class="d-flex justify-content-between align-items-center mb-4">
+  <h1>Events</h1>
+  <div>
+    <%= link_to "All Events", events_path(filter: "all"), class: "btn btn-outline-primary me-2 #{'active' if params[:filter] != 'upcoming' && params[:filter] != 'past'}" %>
+    <%= link_to "Upcoming", events_path(filter: "upcoming"), class: "btn btn-outline-primary me-2 #{'active' if params[:filter] == 'upcoming'}" %>
+    <%= link_to "Past", events_path(filter: "past"), class: "btn btn-outline-primary #{'active' if params[:filter] == 'past'}" %>
+  </div>
+</div>
+
+<% if @events.empty? %>
+  <div class="text-center my-5">
+    <h3>No events found</h3>
+    <p>Try importing events from the Billetto API.</p>
+    <%= button_to "Import Events", import_admin_events_path,
+    method: :post,
+    class: "btn btn-primary",
+    data: { confirm: "Are you sure you want to import events from Billetto API?" } %>
+  </div>
+<% else %>
+  <div class="row">
+    <% @events.each do |event| %>
+      <div class="col-md-6 col-lg-4 mb-4">
+        <div class="card h-100">
+          <% if event.image_url.present? %>
+            <img src="<%= event.image_url %>" class="card-img-top" alt="<%= event.title %>" style="height: 200px; object-fit: cover;">
+          <% else %>
+            <div class="card-img-top bg-light d-flex align-items-center justify-content-center" style="height: 200px;">
+              <span class="text-muted">No Image</span>
+            </div>
+          <% end %>
+          <div class="card-body d-flex flex-column">
+            <h5 class="card-title"><%= event.title %></h5>
+            <p class="card-text text-muted small">
+              <i class="bi bi-calendar"></i> <%= event.start_date&.strftime("%B %d, %Y at %I:%M %p") %>
+            </p>
+            <% if event.location.present? %>
+              <p class="card-text text-muted small">
+                <i class="bi bi-geo-alt"></i> <%= event.location %>
+              </p>
+            <% end %>
+            <p class="card-text"><%= truncate(event.description, length: 100) %></p>
+            
+            <div class="mt-auto">
+              <div class="d-flex justify-content-between align-items-center mb-2">
+                <small class="text-muted">
+                  <strong><%= event.total_votes %></strong> votes
+                </small>
+                <div>
+                  <span class="badge bg-success me-1">
+                    <i class="bi bi-arrow-up"></i> <%= event.upvotes_count %>
+                  </span>
+                  <span class="badge bg-danger">
+                    <i class="bi bi-arrow-down"></i> <%= event.downvotes_count %>
+                  </span>
+                </div>
+              </div>
+              
+              <div class="btn-group w-100" role="group">
+                <%= link_to "View", event_path(event), class: "btn btn-outline-primary btn-sm" %>
+                <%= form_with(url: upvote_event_path(event), method: :post, class: "d-inline") do |form| %>
+                  <%= form.submit "👍", class: "btn btn-outline-success btn-sm", title: "Upvote" %>
+                <% end %>
+                <%= form_with(url: downvote_event_path(event), method: :post, class: "d-inline") do |form| %>
+                  <%= form.submit "👎", class: "btn btn-outline-danger btn-sm", title: "Downvote" %>
+                <% end %>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    <% end %>
+  </div>
+
+  <div class="d-flex justify-content-center mt-4">
+    <%= paginate @events %>
+  </div>
+<% end %>

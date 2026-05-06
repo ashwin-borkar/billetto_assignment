@@ -1,0 +1,118 @@
+<div class="row">
+  <div class="col-md-8">
+    <div class="card">
+      <% if @event.image_url.present? %>
+        <img src="<%= @event.image_url %>" class="card-img-top" alt="<%= @event.title %>" style="height: 400px; object-fit: cover;">
+      <% else %>
+        <div class="card-img-top bg-light d-flex align-items-center justify-content-center" style="height: 400px;">
+          <span class="text-muted h3">No Image Available</span>
+        </div>
+      <% end %>
+      <div class="card-body">
+        <h1 class="card-title"><%= @event.title %></h1>
+        
+        <div class="row mb-3">
+          <div class="col-md-6">
+            <p class="text-muted">
+              <strong>Date & Time:</strong><br>
+              <%= @event.start_date&.strftime("%B %d, %Y at %I:%M %p") %>
+            </p>
+          </div>
+          <% if @event.end_date.present? %>
+            <div class="col-md-6">
+              <p class="text-muted">
+                <strong>End Time:</strong><br>
+                <%= @event.end_date.strftime("%B %d, %Y at %I:%M %p") %>
+              </p>
+            </div>
+          <% end %>
+        </div>
+        
+        <% if @event.location.present? %>
+          <p class="text-muted mb-3">
+            <strong>Location:</strong><br>
+            <%= @event.location %>
+          </p>
+        <% end %>
+        
+        <% if @event.price.present? && @event.price > 0 %>
+          <p class="text-muted mb-3">
+            <strong>Price:</strong><br>
+            <%= number_to_currency(@event.price) %>
+          </p>
+        <% end %>
+        
+        <div class="mb-3">
+          <span class="badge <%= @event.upcoming? ? 'bg-success' : 'bg-secondary' %>">
+            <%= @event.upcoming? ? 'Upcoming' : 'Past Event' %>
+          </span>
+        </div>
+        
+        <div class="card-text">
+          <h5>Description</h5>
+          <% if @event.description.present? %>
+            <p><%= simple_format(@event.description) %></p>
+          <% else %>
+            <p class="text-muted">No description available.</p>
+          <% end %>
+        </div>
+      </div>
+    </div>
+  </div>
+  
+  <div class="col-md-4">
+    <div class="card">
+      <div class="card-header">
+        <h5 class="mb-0">Vote for this Event</h5>
+      </div>
+      <div class="card-body">
+        <div class="text-center mb-3">
+          <h2><%= @event.total_votes %></h2>
+          <p class="text-muted">Total Votes</p>
+        </div>
+        
+        <div class="row text-center mb-3">
+          <div class="col-6">
+            <div class="p-3 bg-light rounded">
+              <h4 class="text-success"><%= @event.upvotes_count %></h4>
+              <small class="text-muted">Upvotes</small>
+            </div>
+          </div>
+          <div class="col-6">
+            <div class="p-3 bg-light rounded">
+              <h4 class="text-danger"><%= @event.downvotes_count %></h4>
+              <small class="text-muted">Downvotes</small>
+            </div>
+          </div>
+        </div>
+        
+        <div class="d-grid gap-2">
+          <%= form_with(url: upvote_event_path(@event), method: :post) do |form| %>
+            <%= form.submit "👍 Upvote", class: "btn btn-success" %>
+          <% end %>
+          
+          <%= form_with(url: downvote_event_path(@event), method: :post) do |form| %>
+            <%= form.submit "👎 Downvote", class: "btn btn-danger" %>
+          <% end %>
+        </div>
+      </div>
+    </div>
+    
+    <div class="card mt-3">
+      <div class="card-header">
+        <h6 class="mb-0">Event Details</h6>
+      </div>
+      <div class="card-body">
+        <small class="text-muted">
+          <p><strong>External ID:</strong> <%= @event.external_id %></p>
+          <p><strong>Created:</strong> <%= @event.created_at.strftime("%B %d, %Y") %></p>
+          <p><strong>Last Updated:</strong> <%= @event.updated_at.strftime("%B %d, %Y") %></p>
+        </small>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="mt-4">
+  <%= link_to "← Back to Events", events_path, class: "btn btn-outline-secondary" %>
+</div>
