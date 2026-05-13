@@ -41,7 +41,7 @@ gem "thruster", require: false
 gem "image_processing", "~> 1.2"
 
 # Rails Event Store for event-driven architecture
-gem "rails_event_store", "~> 2.11"
+gem "rails_event_store", "~> 2.19"
 gem "ruby_event_store-browser", "~> 2.11"
 
 # HTTP client for API integration
