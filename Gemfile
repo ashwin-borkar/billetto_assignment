@@ -42,7 +42,7 @@ gem "image_processing", "~> 1.2"
 
 # Rails Event Store for event-driven architecture
 gem "rails_event_store", "~> 2.11"
-gem "ruby_event_store-browser", "~> 2.11"
+gem "ruby_event_store-browser", "~> 2.19"
 
 # HTTP client for API integration
 gem "httparty", "~> 0.21"
